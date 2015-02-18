@@ -1,0 +1,8 @@
+<!--
+  This view is used to render the installed plugins page.
+-->
+<div>
+   This plugin allows you to display artifact versions already deployed on a Nexus repository.
+   Versions will be available as build parameters (combo box) using. The selected version will be made
+   available in the build environment variables (NEXUS_ARTIFACT_VERSION).
+</div>

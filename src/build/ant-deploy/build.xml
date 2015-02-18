@@ -1,0 +1,41 @@
+<project name="test-deploy" basedir="." default="deploy">
+
+	<property environment="env" />
+	<property file="${basedir}/config/${user.name}.properties" />
+
+	<target name="deploy">
+		<echoproperties />
+		<taskdef resource="net/sf/antcontrib/antlib.xml">
+			<classpath>
+				<pathelement location="lib/ant-contrib/ant-contrib.jar" />
+			</classpath>
+		</taskdef>
+		<mkdir dir="${basedir}/build" />
+
+		<propertyselector property="list" delimiter="," match="repoclient_urls_(.*)$" select="\1" casesensitive="false" />
+		<foreach list="${list}" delimiter="," target="iterate-parameters" param="id" />
+	</target>
+
+	<target name="iterate-parameters">
+		<propertycopy name="maven.reponame" from="env.repoclient_reponame_${id}" override="true" />
+		<propertycopy name="maven.urls" from="env.repoclient_urls_${id}" override="true" />
+		<propertycopy name="maven.password" from="env.repoclient_password_${id}" override="true" silent="true" />
+		<propertycopy name="maven.user" from="env.repoclient_user_${id}" override="true" silent="true" />
+
+		<foreach list="${maven.urls}" delimiter="," target="process" param="url" inheritall="true" />
+	</target>
+
+	<target name="process">
+		<echo message="Downloading ${url} ..." />
+		<antcall target="download-with-credentials" />
+		<antcall target="download-without-credentials" />
+		<!-- TODO: Further process -->
+	</target>
+
+	<target name="download-with-credentials" if="maven.user">
+		<get src="${url}" dest="${basedir}/build" username="${maven.user}" password="${maven.password}" />
+	</target>
+	<target name="download-without-credentials" unless="maven.user">
+		<get src="${url}" dest="${basedir}/build" />
+	</target>
+</project>

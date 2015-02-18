@@ -1,0 +1,30 @@
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form">
+  <f:section title="Nexus Artifact Versions List">
+    <f:entry title="${%Repositories}"
+      description="${%Maven Repositories}">
+      <f:repeatable var="repo" items="${descriptor.repos}">
+        <table width="80%">
+          <f:entry title="${%Name}" help="/plugin/repoclient/help-reponame.html">
+            <f:textbox field="reponame" value="${repo.reponame}"/>
+          </f:entry>
+          <f:entry title="${%Base URL}" help="/plugin/repoclient/help-baseurl.html">
+            <f:textbox field="baseurl" value="${repo.baseurl}"/>
+          </f:entry>
+          <f:entry title="${%Username}" help="/plugin/repoclient/help-username.html">
+            <f:textbox field="username" value="${repo.username}"/>
+          </f:entry>
+          <f:entry title="${%Password}" help="/plugin/repoclient/help-password.html">
+            <f:password field="password" value="${repo.password}"/>
+          </f:entry>
+          <f:validateButton title="${%Test Connection}" progress="${%Testing...}"
+                            method="testConnection" with="baseurl,username,password" />
+          <f:entry title="">
+            <div align="right">
+              <f:repeatableDeleteButton />
+            </div>
+          </f:entry>
+        </table>
+      </f:repeatable>
+    </f:entry>
+  </f:section>
+</j:jelly>

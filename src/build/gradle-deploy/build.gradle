@@ -1,0 +1,36 @@
+defaultTasks 'deploy'
+
+void downloadFile(String url, String username, String password) { 
+    if (username != null) {
+        println "Downloading " + url + " (" + username + ":***********)"
+        ant.get(src: url, dest: buildDir, verbose:true, username: username, password: password)
+    } else {
+        println "Downloading " + url
+        ant.get(src: url, dest: buildDir, verbose:true)
+    } 
+} 
+
+task deploy << {
+    ant.mkdir(dir:buildDir) 
+
+    def env = System.getenv()
+    env.each{
+      // <echoproperties/>
+      println it
+
+      if (it ==~ "repoclient_urls_(.*)\$") {
+      def matcher = it =~ /repoclient_urls_([^=]*)=([^=]*)$/
+        def id = matcher[0][1]
+        def maven_reponame = env["repoclient_reponame_" + id]
+        def maven_password = env["repoclient_password_" + id]
+        def maven_user = env["repoclient_user_" + id]
+        def maven_urls = matcher[0][2].split(",")
+        maven_urls.each {
+          downloadFile(it, maven_user, maven_password)
+          
+          // TODO: Further process
+        }
+      }
+    } 
+}
+

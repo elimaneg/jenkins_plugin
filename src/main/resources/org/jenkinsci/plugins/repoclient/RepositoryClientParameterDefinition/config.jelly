@@ -1,0 +1,24 @@
+<?jelly escape-by-default='true'?>
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define"
+	xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form"
+	xmlns:i="jelly:fmt" xmlns:p="/lib/hudson/project">
+  <f:entry title="${%Repository}" help="/plugin/repoclient/help-repository.html">
+    <select class="setting-input" name="reponame">
+      <j:forEach var="s" items="${descriptor.repos}">
+        <f:option selected="${s.reponame==instance.reponame}" value="${s.reponame}">${s.reponame}</f:option>
+      </j:forEach>
+    </select>
+  </f:entry>
+	<f:entry title="${%GroupId}" help="/plugin/repoclient/help-groupid.html">
+		<f:textbox field="groupid" value="${instance.groupid}" />
+	</f:entry>
+    <f:entry title="${%ArtifactId}" help="/plugin/repoclient/help-artifactid.html">
+        <f:textbox field="artifactid" value="${instance.artifactid}" />
+    </f:entry>
+    <f:entry title="${%Pattern}" help="/plugin/repoclient/help-pattern.html">
+        <f:textbox field="pattern" value="${instance.pattern}" />
+    </f:entry>
+    <f:entry title="${%Description}" help="/plugin/repoclient/help-description.html">
+        <f:textarea field="description" value="${instance.description}" />
+    </f:entry>
+</j:jelly>
